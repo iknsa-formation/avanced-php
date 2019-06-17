@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,14 +8,43 @@
     <title>Document</title>
 </head>
 <body>
-    <form enctype="multipart/form‐data" action="server.php" method="post">
 
-        Envoyez ce fichier :
-        <input name="userfile" type="file" />
-        Nom : <input type="text" name="nom">
-        Prenom : <input type="text" name="prenom">
-        <input type="submit" value="Envoyer" />
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Auteur</th>
+            <th>Titre</th>
+            <th>Message</th>
+            <th>Modifier</th>
+        </tr>
+        <?php
+            require 'connect.php';
 
-    </form>
+            function getArticles($dbh) {
+                $stm = $dbh->query('SELECT * FROM article');
+                return $stm->fetchAll();
+            }
+
+            $articles = getArticles($dbh);
+
+
+            foreach ($articles as $article) {
+                $id = $article['id'];
+                $titre = $article['titre'];
+                $auteur = $article['auteur'];
+                $message = $article['message'];
+                echo "
+                <tr>
+                    <td><a href=\"article.php?id=$id&verb=get\"> article $id </a></td>
+                    <td> $auteur </td>
+                    <td> $titre </td>
+                    <td> $message </td>
+                    <td> <a href=\"article.php?id=$id&verb=put\"> Modifier article</a></td>
+                </tr>";
+
+            }
+        ?>
+    </table>
+
 </body>
 </html>

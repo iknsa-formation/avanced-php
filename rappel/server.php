@@ -1,15 +1,28 @@
 <?php
 
+include 'connect.php';
 
-$user = `formation`;
-$pass = `PassPhp`;
 
-try {
-    $dbh = new PDO('jdbc:mysql://localhost:3306/test_pdo', $user, $pass);
+function addArticle($dbh, $article) {
+    $titre = isset($article['titre']) ? $article['titre'] : 'titre vide';
+    $auteur = isset($article['auteur']) ? $article['auteur'] : 'auteur inconnu';
+    $message = isset($article['message']) ? $article['message'] : 'message vide';
 
-    var_dump($dbh);
+    $stm = $dbh->prepare('INSERT INTO article(titre, auteur, message) 
+                    VALUES (?, ?, ?)');
+    $stm->execute(array(
+        $titre,
+        $auteur,
+        $message
+    ));
 
-} catch (PDOException $e) {
-    print "Erreur !: " . $e->getMessage() . "<br/>";
-    die();
+}
+
+if (isset($_POST['verb']) && $_POST['verb'] === 'add') {
+    $article = [];
+    $article['titre'] = $_POST['title'];
+    $article['auteur'] = $_POST['author'];
+    $article['message'] = $_POST['message'];
+
+    addArticle($dbh, $article);
 }
