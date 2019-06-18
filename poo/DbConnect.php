@@ -16,8 +16,6 @@ class DbConnect
     {
         if (!$this->db) {
 
-            echo 'ici';
-
             $this->db = new \PDO(
                 'mysql:dbname='.self::SQL_DBNAME.';host='.self::SQL_HOST,
                 self::SQL_USER,

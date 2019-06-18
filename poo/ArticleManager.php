@@ -1,9 +1,11 @@
 <?php
 
-
 namespace poo;
 require 'DbConnect.php';
 require 'Article.php';
+
+ini_set('display_errors', 'on');
+error_reporting(E_ALL);
 
 
 class ArticleManager
@@ -26,44 +28,46 @@ class ArticleManager
         $stm = $this->_db->prepare('INSERT INTO article(titre, auteur, message) 
                     VALUES (:titre, :auteur, :message)');
 
-        $stm->bindParam(':titre', $article->getTitre());
-        $stm->bindParam(':auteur', $article->getAuteur());
-        $stm->bindParam(':message', $article->getMessage());
+        $titre = $article->getTitre();
+        $auteur = $article->getAuteur();
+        $message = $article->getMessage();
+
+        $stm->bindParam(':titre', $titre);
+        $stm->bindParam(':auteur', $auteur);
+        $stm->bindParam(':message', $message);
 
         $stm->execute();
 
     }
 
-    function updateArticle($dbh, $article) {
+    function updateArticle(Article $article) {
 
-        $titre = isset($article['titre']) ? $article['titre'] : 'titre vide';
-        $auteur = isset($article['auteur']) ? $article['auteur'] : 'auteur inconnu';
-        $message = isset($article['message']) ? $article['message'] : 'message vide';
-        $id = isset($article['id']) ? $article['id'] : 0;
+        $sql = 'UPDATE article SET titre=:titre, auteur=:auteur, message=:message WHERE id=:id';
+        $stm = $this->_db->prepare($sql);
 
-        $stm = $dbh->prepare('UPDATE article SET titre=?, auteur=?, message=? WHERE id=?');
-        $stm->execute(array(
-            $titre,
-            $auteur,
-            $message,
-            $id
-        ));
+        $titre = $article->getTitre();
+        $auteur = $article->getAuteur();
+        $message = $article->getMessage();
+        $id = $article->getId();
+
+        $stm->bindParam(':titre', $titre);
+        $stm->bindParam(':auteur', $auteur);
+        $stm->bindParam(':message', $message);
+        $stm->bindParam(':id', $id);
+        $stm->execute();
 
     }
 
-    function deleteArticle($dbh, $id) {
-        $stm = $dbh->prepare('DELETE FROM article WHERE id = ?');
-        $stm->execute(array($id));
+    function getArticle($id) {
+        $stm = $this->_db->prepare('SELECT * FROM article WHERE id=:id');
+        $stm->bindParam(':id', $id);
+        $stm->execute();
+        return $stm->fetch();
     }
 
+    function deleteArticle($id) {
+        $stm = $this->_db->prepare('DELETE FROM article WHERE id =:id');
+        $stm->bindParam(':id', $id);
+        $stm->execute();
+    }
 }
-
-$am = new ArticleManager();
-
-$article = new Article([
-    'titre' => 'premier titre',
-    'auteur' => 'Un auteur',
-    'message' => 'Un message pas comme les autres'
-]);
-
-$am->addArticle($article);
