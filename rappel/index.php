@@ -16,6 +16,7 @@
             <th>Titre</th>
             <th>Message</th>
             <th>Modifier</th>
+            <th>Supprimer</th>
         </tr>
         <?php
             require 'connect.php';
@@ -40,6 +41,7 @@
                     <td> $titre </td>
                     <td> $message </td>
                     <td> <a href=\"article.php?id=$id&verb=put\"> Modifier article</a></td>
+                    <td> <a href=\"server.php?id=$id&verb=delete\"> supprimer l'article</a></td>
                 </tr>";
 
             }

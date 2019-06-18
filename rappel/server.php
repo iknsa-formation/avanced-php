@@ -35,6 +35,11 @@ function updateArticle($dbh, $article) {
 
 }
 
+function deleteArticle($dbh, $id) {
+    $stm = $dbh->prepare('DELETE FROM article WHERE id = ?');
+    $stm->execute(array($id));
+}
+
 if (isset($_POST['verb']) && $_POST['verb'] === 'add') {
     $article = [];
     $article['titre'] = $_POST['title'];
@@ -52,5 +57,14 @@ if (isset($_POST['verb']) && $_POST['verb'] === 'put') {
     $article['id'] = (int) $_POST['id'];
 
     updateArticle($dbh, $article);
+
+    header('Location: index.php');
 }
 
+if (isset($_GET['verb']) && $_GET['verb'] === 'delete') {
+
+    $id = $_GET['id'];
+    deleteArticle($dbh, $id);
+    header('Location: index.php');
+
+}
