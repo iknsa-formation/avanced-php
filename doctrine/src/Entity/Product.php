@@ -1,18 +1,19 @@
 <?php
 
-// src/Product.php
+// src/Entity/Product.php
 
 namespace Entity;
 
 /**
- * @Entity @Table(name="products")
+ * @Entity
+ * @Table(name="products")
  **/
 Class Product {
 
     /**
      * @Id
      * @Column(type="integer")
-     * @GenerateValue
+     * @GeneratedValue
      */
     protected $id;
 

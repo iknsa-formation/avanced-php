@@ -10,6 +10,7 @@ $config = Setup::createAnnotationMetadataConfiguration(
     array(__DIR__."/src"),
     $lisDevMode
 );
+
 $conn = array(
     'driver' => 'pdo_mysql',
     'user' => 'formation',
