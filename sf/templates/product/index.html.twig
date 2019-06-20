@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+    {% for product in products %}
+        <tr><td>{{ product.id }}</td>
+        <td>{{ product.name }}</td></tr>
+    {% endfor %}
+    </table>
+{% endblock %}
